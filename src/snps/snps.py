@@ -424,7 +424,7 @@ class SNPs:
             human-readable listing of chromosomes (e.g., '1-3, MT'), empty str if no chromosomes
         """
 
-        chr_list = [f"{i}" for i in [str(x) for x in list(range(0, 27))] + ["X", "Y", "MT"]]
+        chr_list = [f"{i}" for i in [str(x) for x in list(range(0, 27))] + ["X", "Y", "MT", "M"]]
         
         if not self._snps.empty:
             chroms = list(pd.unique(self._snps["chrom"]))
