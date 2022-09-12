@@ -1253,6 +1253,7 @@ class Reader:
                         file.seek(0)
 
                     df = parse("\t")
+                    df["chrom"] = df["chrom"].map(CHROMOSOME)
                 except ValueError:
                     if isinstance(file, io.BufferedIOBase):
                         file.seek(0)
