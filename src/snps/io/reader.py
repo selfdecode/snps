@@ -124,6 +124,15 @@ CHROMOSOME = {
     "MT": "MT",
 }
 
+NA_VALUES = [
+    "--", "A-", "C-",
+    "G-", "T-", "-A",
+    "-C", "-G", "-T",
+    "-/-", "A/-", "C/-",
+    "G/-", "T/-", "-/A",
+    "-/C", "-/G", "-/T",
+]
+
 
 def get_empty_snps_dataframe():
     """Get empty dataframe normalized for usage with ``snps``.
