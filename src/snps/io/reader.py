@@ -246,9 +246,6 @@ class Reader:
         elif re.match("^rs[0-9]*[, \t]{1}[1]", first_line):
             d = self.read_generic(file, compression, skip=0)
             print("snps library reading file as generic type 2")
-        elif re.match("^#*[ ]*rsid[, \t]*chr", first_line):
-            d = self.read_generic(file, compression, )
-            print("snps library reading file as generic type 3")
         elif "vcf" in comments.lower() or "##contig" in comments.lower():
             d = self.read_vcf(file, compression, "vcf", self._rsids)
             print("snps library reading file as VCF")
@@ -1244,8 +1241,6 @@ class Reader:
 
             try:
                 df = parse(",")
-                print(df)
-                print(df.chrom.unique())
                 df["chrom"] = df["chrom"].map(CHROMOSOME)
             except ValueError:
                 try:
@@ -1270,9 +1265,6 @@ class Reader:
                         dtype=NORMALIZED_DTYPES,
                         compression=compression,
                     )
-                    print("22222222")
-                    print(df)
-                    print(df.chrom.unique())
                     df["chrom"] = df["chrom"].map(CHROMOSOME)
             return (df,)
 
