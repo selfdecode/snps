@@ -215,37 +215,53 @@ class Reader:
 
         if "23andMe" in first_line:
             d = self.read_23andme(file, compression)
+            print("snps library reading file as 23andMe")
         elif "Ancestry" in first_line:
             d = self.read_ancestry(file, compression)
+            print("snps library reading file as Ancestry")
         elif first_line.startswith("RSID"):
             d = self.read_ftdna(file, compression)
+            print("snps library reading file as familyTree")
         elif "famfinder" in first_line:
             d = self.read_ftdna_famfinder(file, compression)
+            print("snps library reading file as familyTree")
         elif "MyHeritage" in first_line:
             d = self.read_myheritage(file, compression)
+            print("snps library reading file as MyHeritage")
         elif "Living DNA" in first_line:
             d = self.read_livingdna(file, compression)
+            print("snps library reading file as LivingDNA")
         elif "SNP Name\trsID" in first_line or "SNP.Name\tSample.ID" in first_line:
             d = self.read_mapmygenome(file, compression, first_line)
+            print("snps library reading file as Mapmygenome")
         elif "lineage" in first_line or "snps" in first_line:
             d = self.read_snps_csv(file, comments, compression)
+            print("snps library reading file as CSV")
         elif "rsid\tChromosome\tposition\tgenotype" == first_line.strip():
             d = self.read_tellmegen(file, compression)
+            print("snps library reading file as tellmeGen")
         elif re.match("^#*[ \t]*rsid[, \t]*chr", first_line):
             d = self.read_generic(file, compression)
+            print("snps library reading file as generic type 1")
         elif re.match("^rs[0-9]*[, \t]{1}[1]", first_line):
             d = self.read_generic(file, compression, skip=0)
+            print("snps library reading file as generic type 2")
         elif re.match("^#*[ ]*rsid[, \t]*chr", first_line):
             d = self.read_generic(file, compression, )
+            print("snps library reading file as generic type 3")
         elif "vcf" in comments.lower() or "##contig" in comments.lower():
             d = self.read_vcf(file, compression, "vcf", self._rsids)
+            print("snps library reading file as VCF")
         elif ("Genes for Good" in comments) | ("PLINK" in comments):
             d = self.read_genes_for_good(file, compression)
+            print("snps library reading file as GenesForGood")
         elif "DNA.Land" in comments:
             d = self.read_dnaland(file, compression)
+            print("snps library reading file as dnaland")
         elif first_line.startswith("[Header]"):
             # Global Screening Array, includes SANO and CODIGO46
             d = self.read_gsa(file, compression, comments)
+            print("snps library reading file as GSA")
 
         # detect build from comments if build was not already detected from `read` method
         if not d["build"]:
