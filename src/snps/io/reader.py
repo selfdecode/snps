@@ -1244,6 +1244,8 @@ class Reader:
 
             try:
                 df = parse(",")
+                print(df)
+                print(df.chrom.unique())
                 df["chrom"] = df["chrom"].map(CHROMOSOME)
             except ValueError:
                 try:
@@ -1267,6 +1269,9 @@ class Reader:
                         dtype=NORMALIZED_DTYPES,
                         compression=compression,
                     )
+                    print("22222222")
+                    print(df)
+                    print(df.chrom.unique())
                     df["chrom"] = df["chrom"].map(CHROMOSOME)
             return (df,)
 
