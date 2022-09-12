@@ -66,6 +66,64 @@ TWO_ALLELE_DTYPES = {
     "allele2": object,
 }
 
+CHROMOSOME = {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "10": "10",
+    "11": "11",
+    "12": "12",
+    "13": "13",
+    "14": "14",
+    "15": "15",
+    "16": "16",
+    "17": "17",
+    "18": "18",
+    "19": "19",
+    "20": "20",
+    "21": "21",
+    "22": "22",
+    "23": "X",
+    "24": "Y",
+    "25": "XY",
+    "26": "MT",
+    1: "1",
+    2: "2",
+    3: "3",
+    4: "4",
+    5: "5",
+    6: "6",
+    7: "7",
+    8: "8",
+    9: "9",
+    10: "10",
+    11: "11",
+    12: "12",
+    13: "13",
+    14: "14",
+    15: "15",
+    16: "16",
+    17: "17",
+    18: "18",
+    19: "19",
+    20: "20",
+    21: "21",
+    22: "22",
+    23: "X",
+    24: "Y",
+    25: "XY",
+    26: "MT",
+    "X": "X",
+    "Y": "Y",
+    "MT": "MT",
+}
+
 
 def get_empty_snps_dataframe():
     """Get empty dataframe normalized for usage with ``snps``.
@@ -459,57 +517,7 @@ class Reader:
             )
             df = df.dropna(subset=["rsid", "chrom", "pos"])
             # turn number numbers into string numbers
-            df["chrom"] = df["chrom"].map(
-                {
-                    "1": "1",
-                    "2": "2",
-                    "3": "3",
-                    "4": "4",
-                    "5": "5",
-                    "6": "6",
-                    "7": "7",
-                    "8": "8",
-                    "9": "9",
-                    "10": "10",
-                    "11": "11",
-                    "12": "12",
-                    "13": "13",
-                    "14": "14",
-                    "15": "15",
-                    "16": "16",
-                    "17": "17",
-                    "18": "18",
-                    "19": "19",
-                    "20": "20",
-                    "21": "21",
-                    "22": "22",
-                    1: "1",
-                    2: "2",
-                    3: "3",
-                    4: "4",
-                    5: "5",
-                    6: "6",
-                    7: "7",
-                    8: "8",
-                    9: "9",
-                    10: "10",
-                    11: "11",
-                    12: "12",
-                    13: "13",
-                    14: "14",
-                    15: "15",
-                    16: "16",
-                    17: "17",
-                    18: "18",
-                    19: "19",
-                    20: "20",
-                    21: "21",
-                    22: "22",
-                    "X": "X",
-                    "Y": "Y",
-                    "MT": "MT",
-                }
-            )
+            df["chrom"] = df["chrom"].map(CHROMOSOME)
             df = df.astype(dtype=NORMALIZED_DTYPES)
             df = df.set_index("rsid")
             return (df,)
@@ -1217,8 +1225,10 @@ class Reader:
                     compression=compression,
                 )
 
+
             try:
                 df = parse(",")
+                df["chrom"] = df["chrom"].map(CHROMOSOME)
             except ValueError:
                 try:
                     if isinstance(file, io.BufferedIOBase):
@@ -1241,6 +1251,7 @@ class Reader:
                         dtype=NORMALIZED_DTYPES,
                         compression=compression,
                     )
+                    df["chrom"] = df["chrom"].map(CHROMOSOME)
             return (df,)
 
         return self.read_helper("generic", parser)
