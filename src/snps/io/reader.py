@@ -75,6 +75,64 @@ NA_VALUES = [
     "-/C", "-/G", "-/T",
 ]
 
+CHROMOSOME = {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "10": "10",
+    "11": "11",
+    "12": "12",
+    "13": "13",
+    "14": "14",
+    "15": "15",
+    "16": "16",
+    "17": "17",
+    "18": "18",
+    "19": "19",
+    "20": "20",
+    "21": "21",
+    "22": "22",
+    "23": "X",
+    "24": "Y",
+    "25": "X",
+    "26": "MT",
+    1: "1",
+    2: "2",
+    3: "3",
+    4: "4",
+    5: "5",
+    6: "6",
+    7: "7",
+    8: "8",
+    9: "9",
+    10: "10",
+    11: "11",
+    12: "12",
+    13: "13",
+    14: "14",
+    15: "15",
+    16: "16",
+    17: "17",
+    18: "18",
+    19: "19",
+    20: "20",
+    21: "21",
+    22: "22",
+    23: "X",
+    24: "Y",
+    25: "X",
+    26: "MT",
+    "X": "X",
+    "Y": "Y",
+    "MT": "MT",
+}
+
 def get_empty_snps_dataframe():
     """Get empty dataframe normalized for usage with ``snps``.
 
@@ -165,45 +223,65 @@ class Reader:
 
         if "23andMe" in first_line:
             d = self.read_23andme(file, compression)
+            print('SNPs library reader: 23andMe')
         if "Circle" in first_line:
             d = self.read_circledna(file, compression)
+            print('SNPs library reader: CircleDNA')
         elif "24Genetics" in first_line:
             d = self.read_23andme(file, compression)
+            print('SNPs library reader: 24Genetics')
         elif "Ancestry" in first_line:
             d = self.read_ancestry(file, compression)
+            print('SNPs library reader: Ancestry')
         elif first_line.startswith("RSID"):
             d = self.read_ftdna(file, compression)
+            print('SNPs library reader: FamilyTree')
         elif "famfinder" in first_line:
             d = self.read_ftdna_famfinder(file, compression)
+            print('SNPs library reader: FamilyTree')
         elif "MyHeritage" in first_line:
             d = self.read_myheritage(file, compression)
+            print('SNPs library reader: MyHeritage')
         elif "Living DNA" in first_line:
             d = self.read_livingdna(file, compression)
+            print('SNPs library reader: LivingDNA')
         elif "SNP Name\trsID" in first_line or "SNP.Name\tSample.ID" in first_line:
             d = self.read_mapmygenome(file, compression, first_line)
+            print('SNPs library reader: Mapmygenome')
         elif "lineage" in first_line or "snps" in first_line:
             d = self.read_snps_csv(file, comments, compression)
+            print('SNPs library reader: CSV')
         elif "rsid\tChromosome\tposition\tgenotype" == first_line.strip():
             d = self.read_tellmegen(file, compression)
+            print('SNPs library reader: tellmeGen')
         elif "rsid\tchromosome\tposition\tgenotype" == first_line.strip():
             d = self.read_generic(file, compression)
+            print('SNPs library reader: Generic 1')
         elif "rsid\tchromosome\tposition\tgenotype\tBestandRecommended\tCR" == first_line.strip():
             d = self.read_generic(file, compression)
+            print('SNPs library reader: Generic 2')
         elif re.match("^#*[ \t]*rsid[, \t]*chr", first_line):
             d = self.read_generic(file, compression)
+            print('SNPs library reader: Generic 3')
         elif re.match("^rs[0-9]*[, \t]{1}[1]", first_line):
             d = self.read_generic(file, compression, skip=0)
+            print('SNPs library reader: Generic 4')
         elif "vcf" in comments.lower() or "##contig" in comments.lower():
             d = self.read_vcf(file, compression, "vcf", self._rsids)
+            print('SNPs library reader: VCF')
         elif ("selfdecode" in comments.lower()):
             d = self.read_23andme(file, compression)
+            print('SNPs library reader: Selfdecode')
         elif ("Genes for Good" in comments) | ("PLINK" in comments):
             d = self.read_genes_for_good(file, compression)
+            print('SNPs library reader: GenesForGood')
         elif "DNA.Land" in comments:
             d = self.read_dnaland(file, compression)
+            print('SNPs library reader: dnaland')
         elif first_line.startswith("[Header]"):
             # Global Screening Array, includes SANO and CODIGO46
             d = self.read_gsa(file, compression, comments)
+            print('SNPs library reader: GSA')
 
         # detect build from comments if build was not already detected from `read` method
         if not d["build"]:
@@ -511,66 +589,7 @@ class Reader:
                 df = df.iloc[1:]
             df = df.dropna(subset=["rsid", "chrom", "pos"])
             # turn number numbers into string numbers
-            df["chrom"] = df["chrom"].map(
-                {
-                    "1": "1",
-                    "2": "2",
-                    "3": "3",
-                    "4": "4",
-                    "5": "5",
-                    "6": "6",
-                    "7": "7",
-                    "8": "8",
-                    "9": "9",
-                    "10": "10",
-                    "11": "11",
-                    "12": "12",
-                    "13": "13",
-                    "14": "14",
-                    "15": "15",
-                    "16": "16",
-                    "17": "17",
-                    "18": "18",
-                    "19": "19",
-                    "20": "20",
-                    "21": "21",
-                    "22": "22",
-                    1: "1",
-                    2: "2",
-                    3: "3",
-                    4: "4",
-                    5: "5",
-                    6: "6",
-                    7: "7",
-                    8: "8",
-                    9: "9",
-                    10: "10",
-                    11: "11",
-                    12: "12",
-                    13: "13",
-                    14: "14",
-                    15: "15",
-                    16: "16",
-                    17: "17",
-                    18: "18",
-                    19: "19",
-                    20: "20",
-                    21: "21",
-                    22: "22",
-                    23: "X",
-                    24: "Y",
-                    25: "X",
-                    26: "MT",
-                    "X": "X",
-                    "Y": "Y",
-                    "MT": "MT",
-                    "23": "X",
-                    "24": "Y",
-                    "25": "X",
-                    "26": "MT",
-                    "M": "MT",
-                }
-            )
+            df["chrom"] = df["chrom"].map(CHROMOSOME)
             df = df.astype(dtype=NORMALIZED_DTYPES)
             df = df.set_index("rsid")
             return (df,)
@@ -1267,7 +1286,7 @@ class Reader:
 
         def parser():
             def parse(sep):
-                return pd.read_csv(
+                df = pd.read_csv(
                     file,
                     sep=sep,
                     skiprows=skip,
@@ -1278,7 +1297,8 @@ class Reader:
                     dtype=NORMALIZED_DTYPES,
                     compression=compression,
                 )
-
+                df["chrom"] = df["chrom"].map(CHROMOSOME)
+                return df
             try:
                 df = parse(",")
             except ValueError:
@@ -1303,6 +1323,7 @@ class Reader:
                         dtype=NORMALIZED_DTYPES,
                         compression=compression,
                     )
+                    df["chrom"] = df["chrom"].map(CHROMOSOME)
             return (df,)
 
         return self.read_helper("generic", parser)
