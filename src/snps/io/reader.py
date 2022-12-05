@@ -266,7 +266,7 @@ class Reader:
         elif re.match("^rs[0-9]*[, \t]{1}[1]", first_line):
             d = self.read_generic(file, compression, skip=0)
             print('SNPs library reader: Generic 4')
-        elif "vcf" in comments.lower() or "##contig" in comments.lower():
+        elif ("##" in first_line and "vcf" in comments.lower() and "#CHROM\tPOS" in comments) or "##contig" in comments.lower():
             d = self.read_vcf(file, compression, "vcf", self._rsids)
             print('SNPs library reader: VCF')
         elif ("selfdecode" in comments.lower()):
@@ -817,6 +817,7 @@ class Reader:
                     io.StringIO(file_string_out.getvalue()),
                     comment="#",
                     header=0,
+                    sep='\t',
                     na_values=NA_VALUES,
                     names=["rsid", "chrom", "pos", "genotype"],
                     index_col=0,
