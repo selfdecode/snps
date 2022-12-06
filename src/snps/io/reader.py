@@ -1216,15 +1216,13 @@ class Reader:
         dict
             result of `read_helper`
         """
-        source = ""
+        source = "csv"
         phased = False
         build = 0
 
         comment_lines = comments.split("\n")
         for comment1 in comment_lines:
-            if "Source(s):" in comment1:
-                source = comment1.split("Source(s):")[1].strip()
-            elif "Phased:" in comment1:
+            if "Phased:" in comment1:
                 if comment1.split("Phased:")[1].strip() == "True":
                     phased = True
             elif "Build:" in comment1:
