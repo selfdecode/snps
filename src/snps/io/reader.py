@@ -811,9 +811,9 @@ class Reader:
                     # like the older MyHeritage files
                     line = '"' + '","'.join(line.strip().split(",")) + '"\n'
                 file_string_out.write(line)
-
-            return (
-                pd.read_csv(
+               
+            try:
+               df = pd.read_csv(
                     io.StringIO(file_string_out.getvalue()),
                     comment="#",
                     header=0,
@@ -822,8 +822,20 @@ class Reader:
                     names=["rsid", "chrom", "pos", "genotype"],
                     index_col=0,
                     dtype=NORMALIZED_DTYPES,
-                ),
-            )
+                )
+
+            except pd.errors.ParserError:
+               df = pd.read_csv(
+                    io.StringIO(file_string_out.getvalue()),
+                    comment="#",
+                    header=0,
+                    na_values=NA_VALUES,
+                    names=["rsid", "chrom", "pos", "genotype"],
+                    index_col=0,
+                    dtype=NORMALIZED_DTYPES,
+                )
+
+            return df
 
         return self.read_helper("MyHeritage", parser)
 
