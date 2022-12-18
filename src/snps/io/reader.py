@@ -813,7 +813,7 @@ class Reader:
                 file_string_out.write(line)
                
             try:
-               df = pd.read_csv(
+               df_ = pd.read_csv(
                     io.StringIO(file_string_out.getvalue()),
                     comment="#",
                     header=0,
@@ -825,7 +825,7 @@ class Reader:
                 )
 
             except pd.errors.ParserError:
-               df = pd.read_csv(
+               df_ = pd.read_csv(
                     io.StringIO(file_string_out.getvalue()),
                     comment="#",
                     header=0,
@@ -835,7 +835,7 @@ class Reader:
                     dtype=NORMALIZED_DTYPES,
                 )
 
-            return df
+            return df_
 
         return self.read_helper("MyHeritage", parser)
 
