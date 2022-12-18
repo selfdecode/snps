@@ -835,7 +835,7 @@ class Reader:
                     dtype=NORMALIZED_DTYPES,
                 )
 
-            return df_
+            return df_,
 
         return self.read_helper("MyHeritage", parser)
 
