@@ -1423,8 +1423,9 @@ class Reader:
                 df = pd.read_csv(
                     file,
                     sep=sep,
-                    skiprows=skip,
+                    comment='#',
                     na_values=NA_VALUES,
+                    header=None,
                     names=["rsid", "chrom", "pos", "genotype"],
                     usecols=[0, 1, 2, 3],
                     index_col=0,
@@ -1434,7 +1435,7 @@ class Reader:
                 df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
                 return df
             try:
-                df = parse(",")
+                df = parse("\t")
             except ValueError:
                 try:
                     if isinstance(file, io.BufferedIOBase):
