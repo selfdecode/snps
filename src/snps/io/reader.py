@@ -157,8 +157,8 @@ CHROMOSOME_AXIOM = {
     "21": "21",
     "22": "22",
     "23": "X",
-    "24": "Y",
-    "25": "X",
+    "24": "X",
+    "25": "Y",
     "26": "MT",
     1: "1",
     2: "2",
@@ -1433,6 +1433,7 @@ class Reader:
                     compression=compression,
                 )
                 df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
+                df = df[~df.chrom.isna()]
                 return df
             try:
                 df = parse("\t")
