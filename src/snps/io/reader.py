@@ -133,6 +133,65 @@ CHROMOSOME = {
     "MT": "MT",
 }
 
+CHROMOSOME_AXIOM = {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "10": "10",
+    "11": "11",
+    "12": "12",
+    "13": "13",
+    "14": "14",
+    "15": "15",
+    "16": "16",
+    "17": "17",
+    "18": "18",
+    "19": "19",
+    "20": "20",
+    "21": "21",
+    "22": "22",
+    "23": "X",
+    "24": "Y",
+    "25": "X",
+    "26": "MT",
+    1: "1",
+    2: "2",
+    3: "3",
+    4: "4",
+    5: "5",
+    6: "6",
+    7: "7",
+    8: "8",
+    9: "9",
+    10: "10",
+    11: "11",
+    12: "12",
+    13: "13",
+    14: "14",
+    15: "15",
+    16: "16",
+    17: "17",
+    18: "18",
+    19: "19",
+    20: "20",
+    21: "21",
+    22: "22",
+    23: "X",
+    24: "X",
+    25: "Y",
+    26: "MT",
+    "X": "X",
+    "Y": "Y",
+    "MT": "MT",
+}
+
+
 def get_empty_snps_dataframe():
     """Get empty dataframe normalized for usage with ``snps``.
 
@@ -263,6 +322,11 @@ class Reader:
         elif re.match("^#*[ \t]*rsid[, \t]*chr", first_line):
             d = self.read_generic(file, compression)
             print('SNPs library reader: Generic 3')
+
+        elif re.match("axiom", comments.lower()) | ("Functional Genomic Analysis" in first_line):
+            d = self.read_Axiom(file, compression)
+            print('SNPs library reader: Axiom')
+
         elif re.match("^rs[0-9]*[, \t]{1}[1]", first_line):
             d = self.read_generic(file, compression, skip=0)
             print('SNPs library reader: Generic 4')
@@ -1325,6 +1389,75 @@ class Reader:
                         compression=compression,
                     )
                     df["chrom"] = df["chrom"].map(CHROMOSOME)
+            return (df,)
+
+        return self.read_helper("generic", parser)
+
+    def read_Axiom(self, file, compression, skip=1):
+        """Read and parse generic CSV or TSV file.
+
+        Notes
+        -----
+        Assumes columns are 'rsid', 'chrom' / 'chromosome', 'pos' / 'position', and 'genotype';
+        values are comma separated; unreported genotypes are indicated by '--'; and one header row
+        precedes data. For example:
+
+            rsid,chromosome,position,genotype
+            rs1,1,1,AA
+            rs2,1,2,CC
+            rs3,1,3,--
+
+        Parameters
+        ----------
+        file : str
+            path to file
+
+        Returns
+        -------
+        dict
+            result of `read_helper`
+        """
+
+        def parser():
+            def parse(sep):
+                df = pd.read_csv(
+                    file,
+                    sep=sep,
+                    skiprows=skip,
+                    na_values=NA_VALUES,
+                    names=["rsid", "chrom", "pos", "genotype"],
+                    usecols=[0, 1, 2, 3],
+                    index_col=0,
+                    dtype=NORMALIZED_DTYPES,
+                    compression=compression,
+                )
+                df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
+                return df
+            try:
+                df = parse(",")
+            except ValueError:
+                try:
+                    if isinstance(file, io.BufferedIOBase):
+                        file.seek(0)
+
+                    df = parse("\t")
+                except ValueError:
+                    if isinstance(file, io.BufferedIOBase):
+                        file.seek(0)
+
+                    df = pd.read_csv(
+                        file,
+                        sep=None,
+                        na_values=NA_VALUES,
+                        skiprows=skip,
+                        engine="python",
+                        names=["rsid", "chrom", "pos", "genotype"],
+                        usecols=[0, 1, 2, 3],
+                        index_col=0,
+                        dtype=NORMALIZED_DTYPES,
+                        compression=compression,
+                    )
+                    df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
             return (df,)
 
         return self.read_helper("generic", parser)
