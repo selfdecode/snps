@@ -1362,7 +1362,12 @@ class Reader:
                     dtype=NORMALIZED_DTYPES,
                     compression=compression,
                 )
-                df["chrom"] = df["chrom"].map(CHROMOSOME)
+                resu_axi =  all(elem in df.chrom.tolist() for elem in ['24','25','26','27','28','29','30'])
+                if resu_axi:
+                    df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
+                    df = df[~df.chrom.isna()]
+                else:
+                    df["chrom"] = df["chrom"].map(CHROMOSOME)
                 return df
             try:
                 df = parse(",")
@@ -1388,12 +1393,7 @@ class Reader:
                         dtype=NORMALIZED_DTYPES,
                         compression=compression,
                     )
-                    resu_axi =  all(elem in df.chrom.tolist() for elem in ['24','25','26','27','28','29','30'])
-                    if resu_axi:
-                        df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
-                        df = df[~df.chrom.isna()]
-                    else:
-                        df["chrom"] = df["chrom"].map(CHROMOSOME)
+                    df["chrom"] = df["chrom"].map(CHROMOSOME)
             return (df,)
 
         return self.read_helper("generic", parser)
