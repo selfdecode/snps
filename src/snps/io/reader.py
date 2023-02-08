@@ -323,7 +323,7 @@ class Reader:
             d = self.read_generic(file, compression)
             print('SNPs library reader: Generic 3')
 
-        elif re.match("axiom", comments.lower()) | re.match("Functional Genomic Analysis" in first_line):
+        elif ("axiom", comments.lower()) | ("Functional Genomic Analysis" in first_line):
             d = self.read_Axiom(file, compression)
             print('SNPs library reader: Axiom')
 
