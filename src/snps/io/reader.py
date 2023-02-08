@@ -1364,6 +1364,7 @@ class Reader:
                 )
                 resu_axi =  all(elem in df.chrom.tolist() for elem in ['24','25','26','27','28','29','30'])
                 print("Sto ca")
+                print(resu_axi)
                 if resu_axi:
                     df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
                     df = df[~df.chrom.isna()]
