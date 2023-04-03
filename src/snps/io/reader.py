@@ -133,7 +133,7 @@ CHROMOSOME = {
     "MT": "MT",
 }
 
-CHROMOSOME_AXIOM = {
+CHROMOSOME_FGA = {
     "1": "1",
     "2": "2",
     "3": "3",
@@ -323,9 +323,9 @@ class Reader:
             d = self.read_generic(file, compression)
             print('SNPs library reader: Generic 3')
 
-        elif ("axiom", comments.lower()) or ("Functional Genomic Analysis" in first_line):
-            d = self.read_Axiom(file, compression)
-            print('SNPs library reader: Axiom')
+        elif ("axiom", comments.lower()) and ("Functional Genomic Analysis" in first_line):
+            d = self.read_FGA(file, compression)
+            print('SNPs library reader: Functional Genomic Analysis')
 
         elif re.match("^rs[0-9]*[, \t]{1}[1]", first_line):
             d = self.read_generic(file, compression, skip=0)
@@ -1394,7 +1394,7 @@ class Reader:
 
         return self.read_helper("generic", parser)
 
-    def read_Axiom(self, file, compression, skip=1):
+    def read_FGA(self, file, compression, skip=1):
         """Read and parse generic CSV or TSV file.
 
         Notes
@@ -1433,7 +1433,7 @@ class Reader:
                     dtype=NORMALIZED_DTYPES,
                     compression=compression,
                 )
-                df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
+                df["chrom"] = df["chrom"].map(CHROMOSOME_FGA)
                 df = df[~df.chrom.isna()]
                 return df
             try:
@@ -1460,7 +1460,7 @@ class Reader:
                         dtype=NORMALIZED_DTYPES,
                         compression=compression,
                     )
-                    df["chrom"] = df["chrom"].map(CHROMOSOME_AXIOM)
+                    df["chrom"] = df["chrom"].map(CHROMOSOME_FGA)
             return (df,)
 
         return self.read_helper("generic", parser)
