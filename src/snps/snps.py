@@ -119,7 +119,7 @@ class SNPs:
 
             # Replace multiple rsids separated by commas in index with the first rsid. E.g. rs1,rs2 -> rs1
             multi_rsids = {
-                multi_rsid: multi_rsid.split(",")[0]
+                multi_rsid: sorted(multi_rsid.split(","), key=len)[0]
                 for multi_rsid in list(
                     filter(lambda x: len(x.split(",")) > 1, d["snps"].index)
                 )
