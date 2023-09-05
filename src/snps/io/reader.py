@@ -1473,7 +1473,7 @@ class Reader:
                     df["chrom"] = df["chrom"].map(CHROMOSOME_FGA)
             return (df,)
 
-        return self.read_helper("generic", parser)
+        return self.read_helper("fga", parser)
 
     def read_vcf(self, file, compression, provider, rsids=()):
         """Read and parse VCF file.
