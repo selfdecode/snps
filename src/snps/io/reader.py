@@ -1046,7 +1046,16 @@ class Reader:
                     "Chr": NORMALIZED_DTYPES["chrom"],
                 },
             )
-
+            if df.shape[1] == 1:
+                # Life&Brain uses "," as sep
+                df = pd.read_csv(
+                    io.StringIO(data),
+                    engine="c",
+                    dtype={
+                        "Position": NORMALIZED_DTYPES["pos"],
+                        "Chr": NORMALIZED_DTYPES["chrom"],
+                    },
+                )
             # reserve columns we want out
             assert "rsid" not in df.columns
             assert "chrom" not in df.columns
