@@ -1505,7 +1505,7 @@ class Reader:
                         compression=compression,
                     )
                     df["chrom"] = df["chrom"].map(CHROMOSOME_FGA)
-            return (df,)
+            return (df, False, 38)  # incorrectly detects build as 37
 
         return self.read_helper("fga", parser)
 
