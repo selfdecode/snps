@@ -1265,15 +1265,8 @@ class Reader:
             result of `read_helper`
         """
 
-        # pick the source
-        # ideally we want something more specific than GSA
-        if "SANO" in comments:
-            source = "Sano"
-        elif "CODIGO46" in comments:
-            source = "Codigo46"
-        else:
-            # default to generic global screening array
-            source = "GSA"
+        # default to generic global screening array
+        source = "GSA"
 
         return self._read_gsa_helper(data_or_filename, source)
 
