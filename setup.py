@@ -118,8 +118,8 @@ setup(
         "Issue Tracker": "https://github.com/apriha/snps/issues",
     },
     keywords="snps dna chromosomes bioinformatics vcf",
-    install_requires=["numpy", "pandas!=1.0.0,!=1.1.0", "atomicwrites"],
+    install_requires=["numpy", "pandas", "atomicwrites"],
     extras_require={"ezancestry": ["ezancestry"]},
-    python_requires=">=3.7.1",
+    python_requires=">=3.8",
     platforms=["any"],
 )
